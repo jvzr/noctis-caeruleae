@@ -1,0 +1,42 @@
+// Noctis Caeruleae - Default Niri Config
+// Optimized for noctalia-shell
+
+window-rule {
+    geometry-corner-radius 20
+    clip-to-geometry true
+}
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+}
+
+layout {
+    gaps 8
+    center-focused-column "never"
+}
+
+// Lancer noctalia-shell au démarrage
+spawn-at-startup "qs" "-c" "noctalia-shell"
+
+// Keybindings essentiels
+binds {
+    // Terminal
+    Mod+Return { spawn "ghostty"; }
+
+    // Screenshot (niri built-in)
+    Mod+S { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+
+    // Fermer fenêtre
+    Mod+Shift+Q { close-window; }
+
+    // Navigation
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+J { focus-window-down; }
+    Mod+K { focus-window-up; }
+}
+
+// Screenshots directory
+screenshot-dir "~/Pictures/Screenshots"

@@ -1,0 +1,32 @@
+# BlueBuild Configuration for Noctis Caeruleae
+# See: https://blue-build.org/reference/configuration/
+
+name: noctis-caeruleae
+description: A clean Universal Blue image with niri + noctalia-shell
+base-image: ghcr.io/ublue-os/base
+image-version: "43"
+
+# Enable ISO generation
+installer:
+  enabled: true
+  type: anaconda
+
+  # Optional: Kickstart customization
+  kickstart:
+    # Locale and keyboard
+    locale: en_US.UTF-8
+    keyboard: us
+    timezone: UTC
+
+    # Network
+    network: --bootproto=dhcp --device=link --activate
+
+    # Users (user will set password during installation)
+    rootpw: --lock
+    user:
+      name: user
+      groups: wheel
+
+    # Partitioning (automatic)
+    autopart: --type=lvm
+    clearpart: --all --initlabel

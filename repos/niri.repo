@@ -1,0 +1,7 @@
+[yalter-niri-git]
+name=Copr repo for niri-git owned by yalter
+baseurl=https://copr-be.cloud.fedoraproject.org/results/yalter/niri-git/fedora-$releasever-$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/yalter/niri-git/pubkey.gpg
+repo_gpgcheck=0

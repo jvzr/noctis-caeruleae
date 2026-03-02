@@ -1,0 +1,7 @@
+[pgdev-ghostty]
+name=Copr repo for ghostty owned by pgdev
+baseurl=https://copr-be.cloud.fedoraproject.org/results/pgdev/ghostty/fedora-$releasever-$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/pgdev/ghostty/pubkey.gpg
+repo_gpgcheck=0
