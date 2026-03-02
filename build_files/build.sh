@@ -24,7 +24,7 @@ rpm-ostree install \
     noctalia-shell \
     quickshell \
     brightnessctl \
-    imagemagick \
+    ImageMagick \
     python3 \
     git \
     cliphist \
