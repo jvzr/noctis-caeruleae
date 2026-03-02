@@ -118,7 +118,11 @@ rpm-ostree install \
 echo ""
 echo "⌨️  Installing custom keyboard layout..."
 
-rpm-ostree install /tmp/build_files/xkb-qwerty-fr-0.7.3-2.noarch.rpm
+# Extract the custom layout file from RPM (avoid file conflicts with xkeyboard-config)
+cd /tmp/build_files
+rpm2cpio xkb-qwerty-fr-0.7.3-2.noarch.rpm | cpio -idmv
+cp -v usr/share/X11/xkb/symbols/us_qwerty-fr /usr/share/X11/xkb/symbols/
+echo "✓ Custom QWERTY-FR layout installed" | tee -a $BUILDLOG
 
 # ============================================
 # PHASE 8: Bun (via curl - no RPM available)
