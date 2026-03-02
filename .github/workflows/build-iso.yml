@@ -37,12 +37,20 @@ jobs:
             echo "version=latest" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build ISO with BlueBuild
-        uses: blue-build/github-action@v1.6
-        with:
-          recipe: image.yml
-          build_iso: true
-          iso_name: noctis-caeruleae-${{ steps.version.outputs.version }}
+      - name: Install BlueBuild CLI
+        run: |
+          docker pull ghcr.io/blue-build/cli:latest-installer
+          docker tag ghcr.io/blue-build/cli:latest-installer bluebuild
+          docker run --rm --privileged \
+            --entrypoint /usr/bin/bluebuild-installer \
+            -v /usr/local/bin:/out \
+            bluebuild
+
+      - name: Generate ISO from published image
+        run: |
+          sudo bluebuild generate-iso \
+            --iso-name noctis-caeruleae-${{ steps.version.outputs.version }}.iso \
+            image ghcr.io/jvzr/noctis-caeruleae:latest
 
       - name: Get ISO filename
         id: iso

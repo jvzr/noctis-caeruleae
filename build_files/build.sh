@@ -30,6 +30,10 @@ rpm-ostree install \
     cava \
     wlsunset
 
+# Remove alacritty (noctalia-shell dependency) - we use ghostty instead
+echo "Removing alacritty (replaced by ghostty)..."
+rpm-ostree override remove alacritty || echo "⚠️  alacritty not found (might not be a dependency)"
+
 # ============================================
 # PHASE 2: Display Manager
 # ============================================
