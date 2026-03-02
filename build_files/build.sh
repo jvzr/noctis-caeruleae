@@ -96,7 +96,8 @@ rpm-ostree install \
     golang \
     zig \
     podman \
-    podman-compose
+    podman-compose \
+    unzip
 
 # ============================================
 # PHASE 6: Shell & CLI Tools
@@ -113,7 +114,16 @@ rpm-ostree install \
     chezmoi
 
 # ============================================
-# PHASE 7: Custom Keyboard Layout
+# PHASE 7: Network Services
+# ============================================
+echo ""
+echo "🌐 Installing network services..."
+
+rpm-ostree install \
+    tailscale
+
+# ============================================
+# PHASE 8: Custom Keyboard Layout
 # ============================================
 echo ""
 echo "⌨️  Installing custom keyboard layout..."
@@ -125,37 +135,47 @@ cp -v usr/share/X11/xkb/symbols/us_qwerty-fr /usr/share/X11/xkb/symbols/
 echo "✓ Custom QWERTY-FR layout installed" | tee -a $BUILDLOG
 
 # ============================================
-# PHASE 8: Bun (via curl - no RPM available)
+# PHASE 9: Bun (via direct binary download)
 # ============================================
 echo ""
 echo "📦 Installing bun..."
 
-export BUN_INSTALL=/usr/local
-curl -fsSL https://bun.sh/install | bash
-if [ -f /usr/local/bin/bun ]; then
-    BUN_VERSION=$(/usr/local/bin/bun --version)
+# Download and install bun binary directly to /usr/bin (ostree-compatible)
+curl -fsSL https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip -o /tmp/bun.zip
+unzip -q /tmp/bun.zip -d /tmp/
+mv /tmp/bun-linux-x64/bun /usr/bin/
+chmod +x /usr/bin/bun
+rm -rf /tmp/bun.zip /tmp/bun-linux-x64
+
+if [ -f /usr/bin/bun ]; then
+    BUN_VERSION=$(bun --version)
     echo "✓ Bun $BUN_VERSION installed" | tee -a $BUILDLOG
 else
     echo "⚠️  Bun installation failed" | tee -a $BUILDLOG
 fi
 
 # ============================================
-# PHASE 9: Deno (via curl - no RPM available)
+# PHASE 10: Deno (via direct binary download)
 # ============================================
 echo ""
 echo "📦 Installing deno..."
 
-export DENO_INSTALL=/usr/local
-curl -fsSL https://deno.land/install.sh | sh
-if [ -f /usr/local/bin/deno ]; then
-    DENO_VERSION=$(/usr/local/bin/deno --version | head -1)
+# Download and install deno binary directly to /usr/bin (ostree-compatible)
+curl -fsSL https://github.com/denoland/deno/releases/latest/download/deno-x86_64-unknown-linux-gnu.zip -o /tmp/deno.zip
+unzip -q /tmp/deno.zip -d /tmp/
+mv /tmp/deno /usr/bin/
+chmod +x /usr/bin/deno
+rm -f /tmp/deno.zip
+
+if [ -f /usr/bin/deno ]; then
+    DENO_VERSION=$(deno --version | head -1)
     echo "✓ Deno $DENO_VERSION installed" | tee -a $BUILDLOG
 else
     echo "⚠️  Deno installation failed" | tee -a $BUILDLOG
 fi
 
 # ============================================
-# PHASE 10: Cleanup
+# PHASE 11: Cleanup
 # ============================================
 echo ""
 echo "🧹 Cleaning up..."

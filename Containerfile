@@ -24,7 +24,8 @@ RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
     rpm --import https://copr-be.cloud.fedoraproject.org/results/pgdev/ghostty/pubkey.gpg && \
     rpm --import https://repos.fyralabs.com/terra43/key.asc && \
     rpm --import https://copr-be.cloud.fedoraproject.org/results/solopasha/hyprland/pubkey.gpg && \
-    rpm --import https://copr-be.cloud.fedoraproject.org/results/atim/starship/pubkey.gpg
+    rpm --import https://copr-be.cloud.fedoraproject.org/results/atim/starship/pubkey.gpg && \
+    rpm --import https://pkgs.tailscale.com/stable/fedora/repo.gpg
 
 # ============================================
 # PHASE 2: Run build script
