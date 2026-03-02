@@ -130,7 +130,8 @@ echo "✓ Custom QWERTY-FR layout installed" | tee -a $BUILDLOG
 echo ""
 echo "📦 Installing bun..."
 
-curl -fsSL https://bun.sh/install | bash -s -- bun /usr/local/bin/bun
+export BUN_INSTALL=/usr/local
+curl -fsSL https://bun.sh/install | bash
 if [ -f /usr/local/bin/bun ]; then
     BUN_VERSION=$(/usr/local/bin/bun --version)
     echo "✓ Bun $BUN_VERSION installed" | tee -a $BUILDLOG
