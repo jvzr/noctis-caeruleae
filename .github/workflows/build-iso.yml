@@ -39,12 +39,8 @@ jobs:
 
       - name: Install BlueBuild CLI
         run: |
-          docker pull ghcr.io/blue-build/cli:latest-installer
-          docker tag ghcr.io/blue-build/cli:latest-installer bluebuild
-          docker run --rm --privileged \
-            --entrypoint /usr/bin/bluebuild-installer \
-            -v /usr/local/bin:/out \
-            bluebuild
+          docker run --pull always --rm ghcr.io/blue-build/cli:latest-installer | bash
+          bluebuild --version
 
       - name: Generate ISO from published image
         run: |

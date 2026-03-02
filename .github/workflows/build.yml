@@ -1,9 +1,10 @@
 name: Build and Publish Noctis Caeruleae
 
 on:
-  push:
-    branches:
-      - main
+  # Temporarily disabled auto-build on push
+  # push:
+  #   branches:
+  #     - main
   pull_request:
     branches:
       - main
