@@ -1,0 +1,7 @@
+[solopasha-hyprland]
+name=Copr repo for hyprland owned by solopasha
+baseurl=https://copr-be.cloud.fedoraproject.org/results/solopasha/hyprland/fedora-$releasever-$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://copr-be.cloud.fedoraproject.org/results/solopasha/hyprland/pubkey.gpg
+repo_gpgcheck=0

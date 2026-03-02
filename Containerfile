@@ -21,8 +21,10 @@ COPY repos/*.repo /etc/yum.repos.d/
 # Import GPG keys
 RUN rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
     rpm --import https://copr-be.cloud.fedoraproject.org/results/yalter/niri-git/pubkey.gpg && \
-    rpm --import https://copr-be.cloud.fedoraproject.org/results/zhangyi6324/noctalia-shell/pubkey.gpg && \
-    rpm --import https://copr-be.cloud.fedoraproject.org/results/pgdev/ghostty/pubkey.gpg
+    rpm --import https://copr-be.cloud.fedoraproject.org/results/pgdev/ghostty/pubkey.gpg && \
+    rpm --import https://repos.fyralabs.com/terra43/key.asc && \
+    rpm --import https://copr-be.cloud.fedoraproject.org/results/solopasha/hyprland/pubkey.gpg && \
+    rpm --import https://copr-be.cloud.fedoraproject.org/results/atim/starship/pubkey.gpg
 
 # ============================================
 # PHASE 2: Run build script

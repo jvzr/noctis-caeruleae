@@ -1,0 +1,7 @@
+[terra]
+name=Terra Repository
+baseurl=https://repos.fyralabs.com/terra$releasever
+enabled=1
+gpgcheck=1
+gpgkey=https://repos.fyralabs.com/terra$releasever/key.asc
+repo_gpgcheck=0

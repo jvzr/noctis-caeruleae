@@ -1,7 +1,0 @@
-[zhangyi6324-noctalia-shell]
-name=Copr repo for noctalia-shell owned by zhangyi6324
-baseurl=https://copr-be.cloud.fedoraproject.org/results/zhangyi6324/noctalia-shell/fedora-$releasever-$basearch/
-enabled=1
-gpgcheck=1
-gpgkey=https://copr-be.cloud.fedoraproject.org/results/zhangyi6324/noctalia-shell/pubkey.gpg
-repo_gpgcheck=0
