@@ -95,7 +95,6 @@ rpm-ostree install \
     rust \
     cargo \
     golang \
-    go-tools \
     zig \
     podman \
     podman-compose
