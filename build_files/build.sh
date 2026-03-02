@@ -22,7 +22,6 @@ echo "📦 Installing niri compositor + noctalia-shell..."
 rpm-ostree install \
     niri \
     noctalia-shell \
-    quickshell \
     brightnessctl \
     ImageMagick \
     python3 \
