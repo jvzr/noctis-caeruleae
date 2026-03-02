@@ -1,8 +1,8 @@
 ARG IMAGE_NAME="${IMAGE_NAME:-base-main}"
 ARG BASE_IMAGE="ghcr.io/ublue-os/${IMAGE_NAME}"
-ARG IMAGE_TAG="${IMAGE_TAG:-stable}"
+ARG FEDORA_MAJOR_VERSION="${FEDORA_MAJOR_VERSION:-43}"
 
-FROM ${BASE_IMAGE}:${IMAGE_TAG} AS noctis-caeruleae
+FROM ${BASE_IMAGE}:${FEDORA_MAJOR_VERSION} AS noctis-caeruleae
 
 # ============================================
 # Metadata
