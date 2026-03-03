@@ -228,41 +228,30 @@ else
 fi
 
 # ============================================
-# PHASE 12: Slit (via direct binary download)
+# PHASE 12: Go tools (slit, doggo)
 # ============================================
 echo ""
-echo "📦 Installing slit..."
+echo "📦 Installing Go tools (slit, doggo)..."
 
-curl -fsSL https://github.com/tigrawap/slit/releases/download/1.3.0/slit_linux_amd64 -o /usr/bin/slit
-chmod +x /usr/bin/slit
+export GOBIN=/usr/bin
+go install github.com/tigrawap/slit/cmd/slit@latest
+go install github.com/mr-karan/doggo/cmd/doggo@latest
 
 if [ -f /usr/bin/slit ]; then
-    echo "✓ Slit 1.3.0 installed" | tee -a $BUILDLOG
+    echo "✓ Slit installed" | tee -a $BUILDLOG
 else
     echo "⚠️  Slit installation failed" | tee -a $BUILDLOG
 fi
 
-# ============================================
-# PHASE 13: Doggo (via direct binary download)
-# ============================================
-echo ""
-echo "📦 Installing doggo..."
-
-curl -fsSL https://github.com/mr-karan/doggo/releases/download/v1.1.5/doggo_1.1.5_Linux_x86_64.tar.gz -o /tmp/doggo.tar.gz
-tar -xzf /tmp/doggo.tar.gz -C /tmp/
-mv /tmp/doggo /usr/bin/
-chmod +x /usr/bin/doggo
-rm -f /tmp/doggo.tar.gz
-
 if [ -f /usr/bin/doggo ]; then
-    DOGGO_VERSION=$(doggo --version | head -1)
+    DOGGO_VERSION=$(doggo --version 2>/dev/null | head -1 || echo "unknown")
     echo "✓ Doggo $DOGGO_VERSION installed" | tee -a $BUILDLOG
 else
     echo "⚠️  Doggo installation failed" | tee -a $BUILDLOG
 fi
 
 # ============================================
-# PHASE 14: Cleanup
+# PHASE 13: Cleanup
 # ============================================
 echo ""
 echo "🧹 Cleaning up..."
