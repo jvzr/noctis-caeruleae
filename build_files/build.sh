@@ -30,9 +30,11 @@ rpm-ostree install \
     cava \
     wlsunset
 
-# Remove alacritty (noctalia-shell dependency) - we use ghostty instead
+# Remove unwanted packages pulled as dependencies
 echo "Removing alacritty (replaced by ghostty)..."
-rpm-ostree override remove alacritty || echo "⚠️  alacritty not found (might not be a dependency)"
+rpm-ostree override remove alacritty || echo "⚠️  alacritty not found"
+echo "Removing fuzzel (noctalia has its own launcher)..."
+rpm-ostree override remove fuzzel || echo "⚠️  fuzzel not found"
 
 # ============================================
 # PHASE 2: Display Manager
@@ -68,6 +70,10 @@ command = "tuigreet --time --remember --remember-user-session --sessions /usr/sh
 user = "greeter"
 EOF
 
+# Enable greetd service by default
+mkdir -p /usr/lib/systemd/system-preset
+echo "enable greetd.service" >> /usr/lib/systemd/system-preset/50-noctis-caeruleae.preset
+
 echo "greetd + greeter user configured" | tee -a $BUILDLOG
 
 # ============================================
@@ -92,7 +98,17 @@ rpm-ostree install \
     gnome-disk-utility
 
 # ============================================
-# PHASE 5: Dev Tools & Build Essentials
+# PHASE 5: Gaming
+# ============================================
+echo ""
+echo "🎮 Installing gaming packages..."
+
+rpm-ostree install \
+    steam \
+    gamemode
+
+# ============================================
+# PHASE 6: Dev Tools & Build Essentials
 # ============================================
 echo ""
 echo "🛠️  Installing development tools..."
@@ -117,7 +133,7 @@ rpm-ostree install \
     unzip
 
 # ============================================
-# PHASE 6: Shell & CLI Tools
+# PHASE 7: Shell & CLI Tools
 # ============================================
 echo ""
 echo "🐚 Installing shell and CLI tools..."
@@ -128,10 +144,29 @@ rpm-ostree install \
     eza \
     bat \
     yt-dlp \
-    chezmoi
+    chezmoi \
+    input-remapper \
+    keyd
+
+# Configure keyd for Super tap = overview
+mkdir -p /etc/keyd
+cat > /etc/keyd/default.conf <<'EOF'
+[ids]
+*
+
+[main]
+# Super tap sends Super+Space (for niri overview)
+# Super hold works normally as modifier
+leftmeta = overload(meta, M-space)
+EOF
+
+# Enable input-remapper and keyd services by default
+mkdir -p /usr/lib/systemd/system-preset
+echo "enable input-remapper.service" >> /usr/lib/systemd/system-preset/50-noctis-caeruleae.preset
+echo "enable keyd.service" >> /usr/lib/systemd/system-preset/50-noctis-caeruleae.preset
 
 # ============================================
-# PHASE 7: Network Services
+# PHASE 8: Network Services
 # ============================================
 echo ""
 echo "🌐 Installing network services..."
@@ -140,7 +175,7 @@ rpm-ostree install \
     tailscale
 
 # ============================================
-# PHASE 8: Custom Keyboard Layout
+# PHASE 9: Custom Keyboard Layout
 # ============================================
 echo ""
 echo "⌨️  Installing custom keyboard layout..."
@@ -152,7 +187,7 @@ cp -v usr/share/X11/xkb/symbols/us_qwerty-fr /usr/share/X11/xkb/symbols/
 echo "✓ Custom QWERTY-FR layout installed" | tee -a $BUILDLOG
 
 # ============================================
-# PHASE 9: Bun (via direct binary download)
+# PHASE 10: Bun (via direct binary download)
 # ============================================
 echo ""
 echo "📦 Installing bun..."
@@ -172,7 +207,7 @@ else
 fi
 
 # ============================================
-# PHASE 10: Deno (via direct binary download)
+# PHASE 11: Deno (via direct binary download)
 # ============================================
 echo ""
 echo "📦 Installing deno..."
@@ -192,7 +227,7 @@ else
 fi
 
 # ============================================
-# PHASE 11: Cleanup
+# PHASE 12: Cleanup
 # ============================================
 echo ""
 echo "🧹 Cleaning up..."
