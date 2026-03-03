@@ -68,21 +68,50 @@ Two installation methods are available:
 - Existing Fedora Silverblue, Kinoite, or any Universal Blue image
 - Internet connection
 
-**With signature verification** (recommended):
-```bash
-# Rebase with automatic signature verification
-sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/jvzr/noctis-caeruleae:latest
+#### First-time rebase (two-step process)
 
-# Reboot
+When rebasing to a new signed image for the first time, your system doesn't have the signing key in its trust store yet. You need to do a two-step process:
+
+```bash
+# Step 1: First rebase WITHOUT signature verification
+sudo rpm-ostree rebase ostree-unverified-registry:ghcr.io/jvzr/noctis-caeruleae:latest
+
+# Reboot into the new system
 sudo systemctl reboot
 ```
 
-**Without signature verification** (not recommended):
-```bash
-# Rebase without verification (use only if signature verification fails)
-sudo rpm-ostree rebase ostree-unverified-registry:docker://ghcr.io/jvzr/noctis-caeruleae:latest
+After rebooting, complete the trust setup:
 
-# Reboot
+```bash
+# Step 2: Rebase to the SIGNED version (enables signature verification for future updates)
+sudo rpm-ostree rebase ostree-image-signed:docker://ghcr.io/jvzr/noctis-caeruleae:latest
+
+# Reboot again
+sudo systemctl reboot
+```
+
+**Why two steps?**
+- The first rebase installs the image without verifying signatures (your system doesn't know the key yet)
+- The second rebase switches to the signed transport, enabling automatic signature verification
+- All future updates (`rpm-ostree upgrade`) will automatically verify signatures
+
+#### Rollback if something goes wrong
+
+At any point between reboots, you can rollback to your previous system:
+
+```bash
+sudo rpm-ostree rollback
+sudo systemctl reboot
+```
+
+Your Flatpaks, home directory, WiFi networks, and all user data are preserved during rebase.
+
+#### Subsequent updates
+
+After the initial two-step setup, updates are simple:
+
+```bash
+rpm-ostree upgrade
 sudo systemctl reboot
 ```
 
