@@ -233,9 +233,11 @@ fi
 echo ""
 echo "📦 Installing Go tools (slit, doggo)..."
 
+export GOPATH=/tmp/go
 export GOBIN=/usr/bin
 go install github.com/tigrawap/slit/cmd/slit@latest
 go install github.com/mr-karan/doggo/cmd/doggo@latest
+rm -rf /tmp/go
 
 if [ -f /usr/bin/slit ]; then
     echo "✓ Slit installed" | tee -a $BUILDLOG
