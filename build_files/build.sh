@@ -146,8 +146,6 @@ rpm-ostree install \
     yt-dlp \
     chezmoi \
     gh \
-    slit \
-    doggo \
     input-remapper \
     keyd
 
@@ -230,7 +228,41 @@ else
 fi
 
 # ============================================
-# PHASE 12: Cleanup
+# PHASE 12: Slit (via direct binary download)
+# ============================================
+echo ""
+echo "📦 Installing slit..."
+
+curl -fsSL https://github.com/tigrawap/slit/releases/download/1.3.0/slit_linux_amd64 -o /usr/bin/slit
+chmod +x /usr/bin/slit
+
+if [ -f /usr/bin/slit ]; then
+    echo "✓ Slit 1.3.0 installed" | tee -a $BUILDLOG
+else
+    echo "⚠️  Slit installation failed" | tee -a $BUILDLOG
+fi
+
+# ============================================
+# PHASE 13: Doggo (via direct binary download)
+# ============================================
+echo ""
+echo "📦 Installing doggo..."
+
+curl -fsSL https://github.com/mr-karan/doggo/releases/download/v1.1.5/doggo_1.1.5_Linux_x86_64.tar.gz -o /tmp/doggo.tar.gz
+tar -xzf /tmp/doggo.tar.gz -C /tmp/
+mv /tmp/doggo /usr/bin/
+chmod +x /usr/bin/doggo
+rm -f /tmp/doggo.tar.gz
+
+if [ -f /usr/bin/doggo ]; then
+    DOGGO_VERSION=$(doggo --version | head -1)
+    echo "✓ Doggo $DOGGO_VERSION installed" | tee -a $BUILDLOG
+else
+    echo "⚠️  Doggo installation failed" | tee -a $BUILDLOG
+fi
+
+# ============================================
+# PHASE 14: Cleanup
 # ============================================
 echo ""
 echo "🧹 Cleaning up..."
