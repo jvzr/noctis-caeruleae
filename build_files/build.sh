@@ -44,6 +44,19 @@ rpm-ostree install \
     greetd \
     tuigreet
 
+# Create greeter user and group via sysusers.d (processed on first boot)
+mkdir -p /usr/lib/sysusers.d
+cat > /usr/lib/sysusers.d/greetd.conf <<'EOF'
+g greeter -
+u greeter - "Greeter user" - greeter
+EOF
+
+# Create cache directory for tuigreet --remember
+mkdir -p /usr/lib/tmpfiles.d
+cat > /usr/lib/tmpfiles.d/tuigreet.conf <<'EOF'
+d /var/cache/tuigreet 0755 greeter greeter -
+EOF
+
 # Configure greetd
 mkdir -p /etc/greetd
 cat > /etc/greetd/config.toml <<'EOF'
@@ -51,11 +64,11 @@ cat > /etc/greetd/config.toml <<'EOF'
 vt = 1
 
 [default_session]
-command = "tuigreet --time --remember --cmd niri-session"
+command = "tuigreet --time --remember --remember-user-session --sessions /usr/share/wayland-sessions --cmd niri-session"
 user = "greeter"
 EOF
 
-echo "greetd configured" | tee -a $BUILDLOG
+echo "greetd + greeter user configured" | tee -a $BUILDLOG
 
 # ============================================
 # PHASE 3: Terminal & Editor
