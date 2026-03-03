@@ -145,6 +145,7 @@ rpm-ostree install \
     bat \
     yt-dlp \
     chezmoi \
+    gh \
     input-remapper \
     keyd
 
