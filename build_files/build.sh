@@ -146,6 +146,7 @@ rpm-ostree install \
     yt-dlp \
     chezmoi \
     gh \
+    slit \
     input-remapper \
     keyd
 
