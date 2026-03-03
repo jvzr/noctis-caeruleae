@@ -147,6 +147,7 @@ rpm-ostree install \
     chezmoi \
     gh \
     slit \
+    doggo \
     input-remapper \
     keyd
 
