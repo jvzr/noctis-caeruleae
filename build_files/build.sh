@@ -156,9 +156,9 @@ cat > /etc/keyd/default.conf <<'EOF'
 *
 
 [main]
-# Super tap sends Super+Space (for niri overview)
+# Super tap triggers overview directly via niri IPC
 # Super hold works normally as modifier
-leftmeta = overload(meta, M-space)
+leftmeta = overload(meta, command(niri msg action toggle-overview))
 EOF
 
 # Enable input-remapper and keyd services by default
