@@ -150,15 +150,23 @@ rpm-ostree install \
     keyd
 
 # Configure keyd for Super tap = overview
+# Create wrapper script (keyd runs as root, needs to access user's niri socket)
+mkdir -p /usr/local/bin
+cat > /usr/local/bin/keyd-mod <<'EOF'
+#!/bin/bash
+SOCKET=$(ls /run/user/1000/niri.*.sock 2>/dev/null | head -1)
+runuser -u jvzr -- env NIRI_SOCKET="$SOCKET" niri msg action toggle-overview
+EOF
+chmod +x /usr/local/bin/keyd-mod
+
 mkdir -p /etc/keyd
 cat > /etc/keyd/default.conf <<'EOF'
 [ids]
 *
 
 [main]
-# Super tap triggers overview directly via niri IPC
-# Super hold works normally as modifier
-leftmeta = overload(meta, command(niri msg action toggle-overview))
+# Super tap triggers overview via wrapper script
+leftmeta = overload(meta, command(/usr/local/bin/keyd-mod))
 EOF
 
 # Enable input-remapper and keyd services by default
