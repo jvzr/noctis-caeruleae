@@ -76,6 +76,14 @@ echo "enable greetd.service" >> /usr/lib/systemd/system-preset/50-noctis-caerule
 
 echo "greetd + greeter user configured" | tee -a $BUILDLOG
 
+# Configure console font for Unicode support (tuigreet borders)
+cat > /etc/vconsole.conf <<'EOF'
+KEYMAP="us"
+FONT="Lat2-Terminus16"
+EOF
+
+echo "Console font configured for Unicode support" | tee -a $BUILDLOG
+
 # ============================================
 # PHASE 3: Terminal & Editor
 # ============================================
