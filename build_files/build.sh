@@ -40,11 +40,15 @@ rpm-ostree override remove fuzzel || echo "⚠️  fuzzel not found"
 # PHASE 2: Display Manager
 # ============================================
 echo ""
-echo "🖥️  Installing greetd + tuigreet..."
+echo "🖥️  Installing greetd + tuigreet (NotAShelf fork)..."
 
-rpm-ostree install \
-    greetd \
-    tuigreet
+rpm-ostree install greetd
+
+# Download tuigreet from NotAShelf fork (has TOML config + bug fixes)
+TUIGREET_VERSION="0.9.3"
+curl -fsSL "https://github.com/NotAShelf/tuigreet/releases/download/${TUIGREET_VERSION}/tuigreet-${TUIGREET_VERSION}-x86_64" -o /usr/bin/tuigreet
+chmod +x /usr/bin/tuigreet
+echo "✓ tuigreet ${TUIGREET_VERSION} (NotAShelf fork) installed" | tee -a $BUILDLOG
 
 # Create greeter user and group via sysusers.d (processed on first boot)
 mkdir -p /usr/lib/sysusers.d
@@ -59,15 +63,27 @@ cat > /usr/lib/tmpfiles.d/tuigreet.conf <<'EOF'
 d /var/cache/tuigreet 0755 greeter greeter -
 EOF
 
-# Configure greetd
+# Configure greetd to launch tuigreet
 mkdir -p /etc/greetd
 cat > /etc/greetd/config.toml <<'EOF'
 [terminal]
 vt = 1
 
 [default_session]
-command = "tuigreet --time --remember --remember-user-session --sessions /usr/share/wayland-sessions --cmd niri-session"
+command = "tuigreet"
 user = "greeter"
+EOF
+
+# Configure tuigreet via TOML (NotAShelf fork feature)
+mkdir -p /etc/tuigreet
+cat > /etc/tuigreet/config.toml <<'EOF'
+# Tuigreet configuration (NotAShelf fork)
+command = "niri-session"
+sessions = "/usr/share/wayland-sessions"
+time = true
+remember = true
+remember_user_session = true
+asterisks = true
 EOF
 
 # Enable greetd service by default
