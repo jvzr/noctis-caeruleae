@@ -220,7 +220,24 @@ cp -v usr/share/X11/xkb/symbols/us_qwerty-fr /usr/share/X11/xkb/symbols/
 echo "✓ Custom QWERTY-FR layout installed" | tee -a $BUILDLOG
 
 # ============================================
-# PHASE 10: Bun (via direct binary download)
+# PHASE 10: nirius (niri utilities)
+# ============================================
+echo ""
+echo "📦 Installing nirius..."
+
+export CARGO_HOME=/tmp/cargo
+export RUSTUP_HOME=/tmp/rustup
+cargo install nirius --root /usr
+rm -rf /tmp/cargo /tmp/rustup
+
+if [ -f /usr/bin/nirius ]; then
+    echo "✓ nirius installed" | tee -a $BUILDLOG
+else
+    echo "⚠️  nirius installation failed" | tee -a $BUILDLOG
+fi
+
+# ============================================
+# PHASE 11: Bun (via direct binary download)
 # ============================================
 echo ""
 echo "📦 Installing bun..."
