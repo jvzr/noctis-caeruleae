@@ -54,7 +54,7 @@ echo "✓ tuigreet ${TUIGREET_VERSION} (NotAShelf fork) installed" | tee -a $BUI
 mkdir -p /usr/lib/sysusers.d
 cat > /usr/lib/sysusers.d/greetd.conf <<'EOF'
 g greeter -
-u greeter - "Greeter user" - greeter
+u greeter - "Greeter user" /var/cache/tuigreet /usr/sbin/nologin
 EOF
 
 # Create cache directory for tuigreet --remember
@@ -175,13 +175,13 @@ rpm-ostree install \
 
 # Configure keyd for Super tap = overview
 # Create wrapper script (keyd runs as root, needs to access user's niri socket)
-mkdir -p /usr/local/bin
-cat > /usr/local/bin/keyd-mod <<'EOF'
+mkdir -p /usr/libexec/noctis
+cat > /usr/libexec/noctis/keyd-mod <<'EOF'
 #!/bin/bash
 SOCKET=$(ls /run/user/1000/niri.*.sock 2>/dev/null | head -1)
 runuser -u jvzr -- env NIRI_SOCKET="$SOCKET" niri msg action toggle-overview
 EOF
-chmod +x /usr/local/bin/keyd-mod
+chmod +x /usr/libexec/noctis/keyd-mod
 
 mkdir -p /etc/keyd
 cat > /etc/keyd/default.conf <<'EOF'
@@ -190,7 +190,7 @@ cat > /etc/keyd/default.conf <<'EOF'
 
 [main]
 # Super tap triggers overview via wrapper script
-leftmeta = overload(meta, command(/usr/local/bin/keyd-mod))
+leftmeta = overload(meta, command(/usr/libexec/noctis/keyd-mod))
 EOF
 
 # Enable input-remapper and keyd services by default
