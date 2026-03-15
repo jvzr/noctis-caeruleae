@@ -20,6 +20,7 @@ echo "🔧 Installing system tools..."
 flatpak install -y flathub \
     com.github.tchx84.Flatseal \
     io.github.flattool.Warehouse \
+    io.github.kolunmi.Bazaar \
     com.mattjakeman.ExtensionManager \
     ca.desrt.dconf-editor \
     io.missioncenter.MissionCenter

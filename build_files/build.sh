@@ -127,6 +127,11 @@ rpm-ostree install \
 echo ""
 echo "🎮 Installing gaming packages..."
 
+# Update systemd packages first to resolve i686 dependency conflicts with steam
+rpm-ostree override replace --experimental --from repo=updates \
+    systemd-libs \
+    systemd-shared
+
 rpm-ostree install \
     steam \
     gamemode
