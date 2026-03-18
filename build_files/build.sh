@@ -81,14 +81,27 @@ cat > /etc/tuigreet/config.toml <<'EOF'
 command = "niri-session"
 sessions = "/usr/share/wayland-sessions"
 time = true
-remember = true
-remember_user_session = true
 asterisks = true
+
+[remember]
+username = true
+user_session = true
+
+[theme]
+container = "bright-black"
 EOF
 
 # Enable greetd service by default
 mkdir -p /usr/lib/systemd/system-preset
 echo "enable greetd.service" >> /usr/lib/systemd/system-preset/50-noctis-caeruleae.preset
+
+# Ensure console font is loaded before greetd starts (prevents missing Unicode glyphs)
+mkdir -p /usr/lib/systemd/system/greetd.service.d
+cat > /usr/lib/systemd/system/greetd.service.d/10-vconsole.conf <<'EOF'
+[Unit]
+After=systemd-vconsole-setup.service
+Wants=systemd-vconsole-setup.service
+EOF
 
 echo "greetd + greeter user configured" | tee -a $BUILDLOG
 
