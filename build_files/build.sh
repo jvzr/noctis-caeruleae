@@ -19,7 +19,7 @@ echo "Build started at $(date)" | tee -a $BUILDLOG
 echo ""
 echo "📦 Installing niri compositor + noctalia-shell..."
 
-rpm-ostree install \
+dnf5 -y install \
     niri \
     noctalia-shell \
     brightnessctl \
@@ -32,9 +32,9 @@ rpm-ostree install \
 
 # Remove unwanted packages pulled as dependencies
 echo "Removing alacritty (replaced by ghostty)..."
-rpm-ostree override remove alacritty || echo "⚠️  alacritty not found"
+dnf5 -y remove alacritty || echo "⚠️  alacritty not found"
 echo "Removing fuzzel (noctalia has its own launcher)..."
-rpm-ostree override remove fuzzel || echo "⚠️  fuzzel not found"
+dnf5 -y remove fuzzel || echo "⚠️  fuzzel not found"
 
 # ============================================
 # PHASE 2: Display Manager
@@ -42,7 +42,7 @@ rpm-ostree override remove fuzzel || echo "⚠️  fuzzel not found"
 echo ""
 echo "🖥️  Installing greetd + tuigreet (NotAShelf fork)..."
 
-rpm-ostree install greetd
+dnf5 -y install greetd
 
 # Download tuigreet from NotAShelf fork (has TOML config + bug fixes)
 TUIGREET_VERSION="0.9.3"
@@ -119,7 +119,7 @@ echo "Console font configured for Unicode support" | tee -a $BUILDLOG
 echo ""
 echo "💻 Installing terminal and editor..."
 
-rpm-ostree install \
+dnf5 -y install \
     ghostty \
     code
 
@@ -129,7 +129,7 @@ rpm-ostree install \
 echo ""
 echo "📁 Installing GNOME apps..."
 
-rpm-ostree install \
+dnf5 -y install \
     nautilus \
     file-roller \
     gnome-disk-utility
@@ -140,7 +140,7 @@ rpm-ostree install \
 echo ""
 echo "🎮 Installing gaming packages..."
 
-rpm-ostree install \
+dnf5 -y --setopt=install_weak_deps=False install \
     steam \
     gamemode
 
@@ -150,7 +150,7 @@ rpm-ostree install \
 echo ""
 echo "🛠️  Installing development tools..."
 
-rpm-ostree install \
+dnf5 -y install \
     git \
     gcc \
     gcc-c++ \
@@ -175,7 +175,7 @@ rpm-ostree install \
 echo ""
 echo "🐚 Installing shell and CLI tools..."
 
-rpm-ostree install \
+dnf5 -y install \
     fish \
     starship \
     eza \
@@ -217,7 +217,7 @@ echo "enable keyd.service" >> /usr/lib/systemd/system-preset/50-noctis-caeruleae
 echo ""
 echo "🌐 Installing network services..."
 
-rpm-ostree install \
+dnf5 -y install \
     tailscale
 
 # ============================================
@@ -321,7 +321,7 @@ fi
 echo ""
 echo "🧹 Cleaning up..."
 
-# Build files will be cleaned by Containerfile
+dnf5 clean all
 
 echo ""
 echo "Build completed at $(date)" | tee -a $BUILDLOG
